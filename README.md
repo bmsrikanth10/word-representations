@@ -1,2 +1,2 @@
 # word-representations
-Exploring Word Representations
+Exploring Word Representations using Bag of Words and Glove representation
