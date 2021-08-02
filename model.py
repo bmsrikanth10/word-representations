@@ -11,10 +11,7 @@ import numpy as np
 from itertools import islice
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-
-# This should print a CUDA device:
-
-print(device)
+print(device) #print the CUDA device
 
 def word2index(word, vocab):
     """
@@ -62,17 +59,8 @@ class Model(object):
 
         self.valid_data = []
         self.valid_label = []
-# 
-#             """
-#             # TODO
-#             You should modify the code for the baseline Classifiers for self.algo == "GLOVE" (and otherwise use BOW) 
-#             shown below, it should have a high performance no less than 0.8 in terms of acc for the GLOVE condition. 
-#             You can replace or modify the classifier, but you must at least define the dimension for the output of 
-#             the linear layer (e.g., SIZE in nn.Linear(self.embed_size, SIZE), which is hidden size of this layer and 
-#             needs to be the same as the first arg of nn.Linear (don't change the 2, which corresponds to the number of classes).
-#             """
+
         if self.algo == "GLOVE":
-            # TODO
             self.model = nn.Sequential(
             nn.Linear(self.embed_size, self.SIZE),
             nn.ReLU(),
@@ -82,7 +70,7 @@ class Model(object):
             nn.ReLU(),
             nn.Linear(self.SIZE, 2),
             nn.LogSoftmax())
-        else:# TODO
+        else:
             self.model = nn.Sequential(
         	nn.Linear(len(self.vocab), self.SIZE),
             nn.ReLU(),
@@ -95,7 +83,7 @@ class Model(object):
 
     def load_dataset(self):
         """
-        Load the training and testing dataset
+        Loading the Training and Test dataset
         """
         for sentence in self.pos_sentences:
             new_sentence = []
@@ -147,15 +135,6 @@ class Model(object):
         """ 
         Convert sentence text to vector representation 
         """
-        """
-        #TODO 
-        You should modify the code to define two method to convert sentence text to vector representation 
-        one is for Glove and another is for BOW. The first step is to set the size of the vectors, 
-        which will be different for GLOVE and BOW. The next step is to create the vector for your input sentence.
-        Take the sentence vector to be the average of its word vectors.  Hint: Use numpy to init the vector; 
-        Retrieve the GLOVE word vector from the embeddings_dict you create below, and retrieve the BOW vector 
-        from self.vocab defined as part of the init for the class.
-        """
         if self.algo == "GLOVE":
             #TODO
             sentence_vector = np.zeros(self.embed_size)
@@ -184,11 +163,6 @@ class Model(object):
         """
         Load Glove embeddings dictionary
         """
-        """
-        # TODO
-        You should load the Glove embedding from the local glove files like﻿"glove.8B.50d", 
-        Then use "self.embeddings_dict" to store this words dict.
-        """
         with open(path, 'r', encoding='utf-8') as f:
             for line in f:
                 index = line.split()
@@ -200,16 +174,9 @@ class Model(object):
 
     def training(self):
         """
-        The whole training and testing process.
+        Training and testing process...
         """
         losses = []
-        """
-        Note that the learning rate (lr) is a command line parameter.
-        Here we provide a Cross entropy loss function 
-        and an Adam optimizer here, which includes the lr and model.parameters()
-        If you choose, you can redefine the optimizer and loss_function
-        """
-        # TODO
         loss_function = torch.nn.NLLLoss()
         optimizer = torch.optim.Adam(self.model.parameters(), lr=self.lr)
         for epoch in range(10):
@@ -241,9 +208,9 @@ class Model(object):
                         val_losses.append(loss.data.numpy())
 
                     right_ratio = 1.0 * np.sum([i[0] for i in rights]) / np.sum([i[1] for i in rights])
-                    print('At the {} epoch，Training loss：{:.2f}, Testing loss：{:.2f}, Testing Acc: {:.2f}'.format(epoch, np.mean(losses),
+                    print('Epoch number: {}，Training loss：{:.2f}, Testing loss：{:.2f}, Testing Acc: {:.2f}'.format(epoch, np.mean(losses),
                                                                                 np.mean(val_losses), right_ratio))
-        print("Training End")
+        print("End of Training")
 
 
 
